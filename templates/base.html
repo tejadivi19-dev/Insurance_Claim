@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Insurance Claim Predictor{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="{{ url_for('home') }}">Claim<span>Check</span></a>
+    <nav>
+      <a href="{{ url_for('home') }}" {% if request.endpoint in ('home','predict') %}aria-current="page"{% endif %}>Predict</a>
+      <a href="{{ url_for('performance') }}" {% if request.endpoint == 'performance' %}aria-current="page"{% endif %}>Model performance</a>
+    </nav>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer>Academic project. Predictions come from a machine-learning model trained on a sample dataset and must not be used for real insurance decisions.</footer>
+</body>
+</html>

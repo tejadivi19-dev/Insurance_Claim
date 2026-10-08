@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="intro">
+  <h1>Will this person make an insurance claim?</h1>
+  <p>Enter six details and the model estimates the chance of a claim. It was trained on 1,338 policyholders{% if acc %} and scores about {{ acc }}% on people it had not seen before{% endif %}.</p>
+</section>
+
+{% if model_error %}
+<div class="alert error" role="alert">{{ model_error }}</div>
+{% endif %}
+{% if errors %}
+<div class="alert error" role="alert">Fix the highlighted fields and try again.</div>
+{% endif %}
+
+<form class="sheet" action="{{ url_for('predict') }}" method="post" novalidate>
+  <fieldset>
+    <legend>About the person</legend>
+    <div class="grid">
+      <label>Age <small>years, 18 to 100</small>
+        <input type="number" name="age" min="18" max="100" step="1" inputmode="numeric" required
+               value="{{ values.get('age','') }}" {% if errors.age %}aria-invalid="true"{% endif %}>
+        {% if errors.age %}<span class="err">{{ errors.age }}</span>{% endif %}
+      </label>
+      <label>Sex
+        <select name="sex" required {% if errors.sex %}aria-invalid="true"{% endif %}>
+          <option value="male" {{ 'selected' if values.get('sex')=='male' }}>Male</option>
+          <option value="female" {{ 'selected' if values.get('sex')=='female' }}>Female</option>
+        </select>
+        {% if errors.sex %}<span class="err">{{ errors.sex }}</span>{% endif %}
+      </label>
+      <label>Number of children <small>0 to 10</small>
+        <input type="number" name="children" min="0" max="10" step="1" inputmode="numeric" required
+               value="{{ values.get('children','') }}" {% if errors.children %}aria-invalid="true"{% endif %}>
+        {% if errors.children %}<span class="err">{{ errors.children }}</span>{% endif %}
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Health and lifestyle</legend>
+    <div class="grid">
+      <label>BMI <small>for example 27.5</small>
+        <input type="number" name="bmi" min="10" max="70" step="0.01" inputmode="decimal" required
+               value="{{ values.get('bmi','') }}" {% if errors.bmi %}aria-invalid="true"{% endif %}>
+        {% if errors.bmi %}<span class="err">{{ errors.bmi }}</span>{% endif %}
+      </label>
+      <label>Average daily steps <small>for example 5000</small>
+        <input type="number" name="steps" min="0" max="50000" step="1" inputmode="numeric" required
+               value="{{ values.get('steps','') }}" {% if errors.steps %}aria-invalid="true"{% endif %}>
+        {% if errors.steps %}<span class="err">{{ errors.steps }}</span>{% endif %}
+      </label>
+      <label>Smoker
+        <select name="smoker" required {% if errors.smoker %}aria-invalid="true"{% endif %}>
+          <option value="no" {{ 'selected' if values.get('smoker')=='no' }}>No</option>
+          <option value="yes" {{ 'selected' if values.get('smoker')=='yes' }}>Yes</option>
+        </select>
+        {% if errors.smoker %}<span class="err">{{ errors.smoker }}</span>{% endif %}
+      </label>
+    </div>
+  </fieldset>
+
+  <button type="submit" class="primary">Estimate claim chance</button>
+</form>
+{% endblock %}

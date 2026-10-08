@@ -1,0 +1,82 @@
+{
+  "best_model": "Gradient Boosting",
+  "best_params": {
+    "gradientboostingclassifier__learning_rate": 0.1,
+    "gradientboostingclassifier__max_depth": 3,
+    "gradientboostingclassifier__n_estimators": 200
+  },
+  "features": [
+    "age",
+    "sex",
+    "bmi",
+    "steps",
+    "children",
+    "smoker"
+  ],
+  "results": {
+    "Logistic Regression": {
+      "cv_mean": 0.8897196261682243,
+      "cv_std": 0.027661025396165898,
+      "test_accuracy": 0.8582089552238806,
+      "precision": 0.8695652173913043,
+      "recall": 0.89171974522293,
+      "f1": 0.8805031446540881,
+      "roc_auc": 0.9049176565100132
+    },
+    "Random Forest": {
+      "cv_mean": 0.9682242990654206,
+      "cv_std": 0.010818539161486172,
+      "test_accuracy": 0.9813432835820896,
+      "precision": 0.975,
+      "recall": 0.9936305732484076,
+      "f1": 0.9842271293375394,
+      "roc_auc": 0.9974464910770643
+    },
+    "Gradient Boosting": {
+      "cv_mean": 0.9813084112149533,
+      "cv_std": 0.011446213751323256,
+      "test_accuracy": 0.9888059701492538,
+      "precision": 0.9873417721518988,
+      "recall": 0.9936305732484076,
+      "f1": 0.9904761904761905,
+      "roc_auc": 0.9986228266483044
+    }
+  },
+  "feature_importance": {
+    "children": 0.334234095631822,
+    "bmi": 0.30603211437293565,
+    "smoker": 0.1719749035497589,
+    "steps": 0.1064732124782003,
+    "age": 0.08101766180989393,
+    "sex": 0.0002680121573893063
+  },
+  "feature_ranges": {
+    "age": [
+      18.0,
+      64.0
+    ],
+    "sex": [
+      0.0,
+      1.0
+    ],
+    "bmi": [
+      15.96,
+      53.13
+    ],
+    "steps": [
+      3000.0,
+      10010.0
+    ],
+    "children": [
+      0.0,
+      5.0
+    ],
+    "smoker": [
+      0.0,
+      1.0
+    ]
+  },
+  "train_rows": 1070,
+  "test_rows": 268,
+  "sklearn_version": "1.9.1"
+}

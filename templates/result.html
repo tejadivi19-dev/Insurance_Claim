@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Result - Insurance Claim Predictor{% endblock %}
+{% block content %}
+<section class="result {{ 'is-claim' if claim else 'is-noclaim' }}">
+  <h1>{{ 'Likely to make a claim' if claim else 'Unlikely to make a claim' }}</h1>
+  <p class="lead">The model puts the chance of a claim at <strong>{{ probability }}%</strong>.</p>
+
+  <div class="gauge" role="img" aria-label="Claim probability {{ probability }} percent; the decision threshold is 50 percent">
+    <div class="track"><div class="fill" style="width: {{ probability }}%"></div></div>
+    <div class="marker" style="left: {{ probability }}%"><span>{{ probability }}%</span></div>
+    <div class="threshold" style="left: 50%"></div>
+    <div class="scale"><span>0%</span><span>50% threshold</span><span>100%</span></div>
+  </div>
+
+  {% for n in notes %}<div class="alert warn">{{ n }}</div>{% endfor %}
+
+  <h2>What you entered</h2>
+  <dl class="inputs">
+    <div><dt>Age</dt><dd>{{ inputs.age }}</dd></div>
+    <div><dt>Sex</dt><dd>{{ inputs.sex|capitalize }}</dd></div>
+    <div><dt>Children</dt><dd>{{ inputs.children }}</dd></div>
+    <div><dt>BMI</dt><dd>{{ inputs.bmi }}</dd></div>
+    <div><dt>Daily steps</dt><dd>{{ inputs.steps }}</dd></div>
+    <div><dt>Smoker</dt><dd>{{ inputs.smoker|capitalize }}</dd></div>
+  </dl>
+
+  <p><a class="primary" href="{{ url_for('home') }}">Check another person</a>
+     <a class="link" href="{{ url_for('performance') }}">How accurate is this?</a></p>
+</section>
+{% endblock %}

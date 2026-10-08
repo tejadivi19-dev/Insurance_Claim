@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Model performance - Insurance Claim Predictor{% endblock %}
+{% block content %}
+<section class="intro">
+  <h1>How well does the model work?</h1>
+  {% if m %}
+  <p>Three models were compared with 5-fold cross-validation. The winner, <strong>{{ m.best_model }}</strong>, was then tuned and tested once on {{ m.test_rows }} people it never saw during training.</p>
+  {% else %}
+  <p class="alert error">No metrics found. Run <code>python train_model.py</code> first.</p>
+  {% endif %}
+</section>
+
+{% if m %}
+<section class="table-wrap">
+  <table>
+    <thead><tr><th>Model</th><th>Cross-val accuracy</th><th>Test accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th></tr></thead>
+    <tbody>
+    {% for name, r in m.results.items() %}
+      <tr {% if name == m.best_model %}class="best"{% endif %}>
+        <th scope="row">{{ name }}</th>
+        <td>{{ '%.1f'|format(r.cv_mean*100) }}% &plusmn; {{ '%.1f'|format(r.cv_std*100) }}</td>
+        <td>{{ '%.1f'|format(r.test_accuracy*100) }}%</td>
+        <td>{{ '%.3f'|format(r.precision) }}</td>
+        <td>{{ '%.3f'|format(r.recall) }}</td>
+        <td>{{ '%.3f'|format(r.f1) }}</td>
+        <td>{{ '%.3f'|format(r.roc_auc) }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="charts">
+  <img src="{{ url_for('static', filename='img/model_comparison.png') }}" alt="Bar chart comparing test accuracy of the three models">
+  <img src="{{ url_for('static', filename='img/feature_importance.png') }}" alt="Bar chart of feature importance">
+  <img src="{{ url_for('static', filename='img/confusion_matrix.png') }}" alt="Confusion matrix of the best model on the test set">
+</section>
+
+<section class="prose">
+  <h2>Method in brief</h2>
+  <p>Features used: {{ m.features|join(', ') }}. The charges column was left out on purpose: it is only known after a claim happens, so using it would let the model cheat. Region was dropped because it has almost no link to claims.</p>
+  <p>The data was split 80/20 with the same share of claims in both parts. Models were chosen using only the training part; the test part was used once at the end.</p>
+  <h2>Limits</h2>
+  <p>The dataset is small ({{ m.train_rows + m.test_rows }} rows), and the very high score suggests the data follows clear patterns that real-world data may not. Treat this as a demonstration, not a tool for real decisions.</p>
+</section>
+{% endif %}
+{% endblock %}
